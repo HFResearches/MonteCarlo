@@ -4,3 +4,8 @@
 *.exe
 
 build/
+
+*.swp
+*.swo
+*~
+
