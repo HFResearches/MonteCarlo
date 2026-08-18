@@ -93,6 +93,7 @@ void MonteCarlo(){
     period.clear(); 
   }
 }
+
 double body(size_t x){
   if(x <= period.size()){
     {
@@ -102,10 +103,30 @@ double body(size_t x){
       return std::abs(c.open - c.close);
     }
 
-  } else if(x > period.size()){
+  }else{
 
     std::cout << "out of the index!\n";
     
     return {};
   }
 }
+
+double net(size_t x){
+  if(x <= period.size()){
+    {
+      std::lock_guard<std::mutex>
+        lock(mtx);
+
+      candle c = period[x];
+      return c.open - c.close;
+    }
+
+  }else{
+
+    std::cout << "out of the index!\n";
+
+    return {};
+  }
+}
+
+
