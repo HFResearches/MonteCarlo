@@ -103,13 +103,6 @@ double body(size_t x){
 
       return std::abs(c.open - c.close);
     }
-
-<<<<<<< HEAD
-  }else{
-
-    std::cout << "out of the index!\n";
-    
-=======
     if(x > period.size()){
       throw std::runtime_error("out of the index!\n");
     }
@@ -171,27 +164,9 @@ double upperShadow(size_t x){
     
   }catch(const std::exception& ex){
     std::cerr << "error:" << ex.what() << '\n';
->>>>>>> 6b21fc1 (Implemented exception system to best diagnostistics on debugging the stuffs)
     return {};
   }
 }
 
-double net(size_t x){
-  if(x <= period.size()){
-    {
-      std::lock_guard<std::mutex>
-        lock(mtx);
-
-      candle c = period[x];
-      return c.open - c.close;
-    }
-
-  }else{
-
-    std::cout << "out of the index!\n";
-
-    return {};
-  }
-}
 
 
