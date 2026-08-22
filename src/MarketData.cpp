@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <algorithm>
 
+#include <stdexcept>
 #include <numeric>
 #include <atomic>
 #include <memory>
@@ -95,7 +96,7 @@ void MonteCarlo(){
 }
 
 double body(size_t x){
-  if(x <= period.size()){
+  try{
     {
       std::lock_guard<std::mutex> lock(mtx);
       candle c = period[x];
@@ -103,10 +104,74 @@ double body(size_t x){
       return std::abs(c.open - c.close);
     }
 
+<<<<<<< HEAD
   }else{
 
     std::cout << "out of the index!\n";
     
+=======
+    if(x > period.size()){
+      throw std::runtime_error("out of the index!\n");
+    }
+  }catch(const std::exception& ex){
+    std::cerr << "error:" << ex.what() << '\n';
+    return {};
+  }
+}
+
+double net(size_t x){
+  try{
+    {
+      std::lock_guard<std::mutex> lock(mtx);
+      candle c = period[x];
+      return c.open - c.close;
+    }
+
+    if(x > period.size()){
+      throw std::runtime_error("out of the index!\n");
+    }
+  }catch(const std::exception& ex){
+    std::cerr << "error:" << ex.what() << '\n';
+    return {};
+  }
+}
+
+double lowerShadow(size_t x){
+  try{
+    {
+      std::lock_guard<std::mutex> lock(mtx);
+      candle c = period[x];
+    
+      return (((c.open - c.close) < 0) ? c.close - c.low : 0);
+      return (((c.open - c.close) > 0) ? c.open - c.low : 0);
+    }
+
+    if(x > period.size()){
+      throw std::runtime_error("out of index !\n"); 
+    }
+  }catch(const std::exception& ex){
+    std::cerr << "error:" << ex.what() << '\n';
+    return {};
+  }
+}
+
+double upperShadow(size_t x){
+  try{
+    {
+      std::lock_guard<std::mutex> lock(mtx);
+      candle c = period[x];
+    
+      return (((c.open - c.close) < 0) ? c.open - c.high : 0);
+      return (((c.open - c.close) > 0) ? c.close - c.high : 0);
+    }
+
+    if(x > period.size()){
+      throw std::runtime_error("out of index !\n"); 
+    }
+    
+  }catch(const std::exception& ex){
+    std::cerr << "error:" << ex.what() << '\n';
+>>>>>>> 6b21fc1 (Implemented exception system to best diagnostistics on debugging the stuffs)
     return {};
   }
 }
