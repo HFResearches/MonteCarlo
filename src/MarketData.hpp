@@ -13,6 +13,7 @@ extern std::mutex mtx;
 
 void MonteCarlo();
 
+size_t idx(size_t x);
 double body(size_t x);
 double net(size_t x);
 double lowerShadow(size_t x);

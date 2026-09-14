@@ -1,5 +1,7 @@
 #include <iostream>
 #include <random>
+#include <chrono>
+#include <thread>
 
 #include <mutex>
 #include <vector>
@@ -89,22 +91,28 @@ void MonteCarlo(){
         std::lock_guard<std::mutex> lock(mtx);
         period.push_back(c);
       }
-    }
-
-    period.clear(); 
+    } 
   }
+}
+
+size_t idx(size_t x){
+  for(size_t a{0}; a < period.size(); a++)
+    return (a+x) <= period.size() ? a+x : 0;
 }
 
 double body(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
-      candle c = period[x];
+     
+       candle c = period[x];
 
-      return std::abs(c.open - c.close);
+       return std::abs(c.open - c.close);
     }
+
     if(x > period.size()){
       throw std::runtime_error("out of the index!\n");
+      std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
   }catch(const std::exception& ex){
     std::cerr << "error:" << ex.what() << '\n';
@@ -116,12 +124,14 @@ double net(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
-      candle c = period[x];
-      return c.open - c.close;
+        candle c = period[x];
+
+        return c.open - c.close;
     }
 
     if(x > period.size()){
       throw std::runtime_error("out of the index!\n");
+      std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
   }catch(const std::exception& ex){
     std::cerr << "error:" << ex.what() << '\n';
@@ -133,10 +143,11 @@ double lowerShadow(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
+
       candle c = period[x];
     
-      return (((c.open - c.close) < 0) ? c.close - c.low : 0);
-      return (((c.open - c.close) > 0) ? c.open - c.low : 0);
+        return (((c.open - c.close) < 0) ? c.close - c.low : 0);
+        return (((c.open - c.close) > 0) ? c.open - c.low : 0);
     }
 
     if(x > period.size()){
@@ -152,10 +163,11 @@ double upperShadow(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
-      candle c = period[x];
+     
+        candle c = period[x];
     
-      return (((c.open - c.close) < 0) ? c.open - c.high : 0);
-      return (((c.open - c.close) > 0) ? c.close - c.high : 0);
+        return (((c.open - c.close) < 0) ? c.open - c.high : 0);
+        return (((c.open - c.close) > 0) ? c.close - c.high : 0);
     }
 
     if(x > period.size()){
