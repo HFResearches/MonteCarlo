@@ -19,4 +19,3 @@ add_library(MonteCarloLib
 target_link_libraries(MonteCarlo PRIVATE 
   MonteCarloLib)
 
-find_package(
