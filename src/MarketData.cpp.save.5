@@ -145,7 +145,7 @@ double body(size_t x){
       candle c = period[x];
 
       return x <= period.size() ?
-      std::abs(c.open - c.close) : 0; 
+      std::abs(c.open - c.close) : 0.0; 
     }
 
     if(x > period.size()){

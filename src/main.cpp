@@ -9,30 +9,28 @@ size_t x{0uz};
 int engulfing{0};
 
 int main(){
-  using namespace std::chrono_literals;
-
   std::thread t(MonteCarlo);
   t.detach();
   
   while(true){
-    if(period.size() < 3){
-      std::cerr << "it isnt pushing anything here into period.size()!\n";
-    } else {
-      
-      bool condition = (body(idx(2)) < body(idx(3))
-      && (net(idx(1)) < 0 || net(idx(1)) > 0));
+      bool condition = body(idx(2)) < body(idx(3))
+      && (net(idx(1)) < 0 || net(idx(1)) > 0) && 
+      period.size() <= 1024 && period.size() >= 3 &&
+      (!period.empty());
       if(condition){
         engulfing+=1;
         
-        std::cout << "engulfing:" << engulfing << "\n";
+        std::cout << "engulfing:" << engulfing << 
+        " :" << period.size() << "\n";
       }
  
-      if(period.size() >= 3096){
-        period.clear();
-
-        engulfing = 0;
-      }
-    }
+      if(period.empty() || 3 > period.size())
+        std::this_thread::sleep_for(
+        std::chrono::milliseconds(5));
+      do{
+        engulfing--;
+      }while(period.size() >= 1024 && engulfing >= 
+       period.size()); 
   }
 
   return {};

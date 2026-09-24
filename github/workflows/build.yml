@@ -1,0 +1,26 @@
+name: automated build
+
+on:
+  push:
+    branches: requests [ main ]
+  pull_request:
+    branches: requests [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: cheking the code btw
+        uses: actions/checkout@v4
+
+      - name: installing dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake clang ccache
+
+      - name: configuring cmake
+        run: cmake --B build -S . DCMAKE_BUILD_TYPE=Debug
+
+      - name: compiling
+        run: cmake --build build j4

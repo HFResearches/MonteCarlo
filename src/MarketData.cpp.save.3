@@ -3,7 +3,7 @@
 #include <thread>
 
 #include <mutex>
-#include <vector>
+,#include <vector>
 #include <iomanip>
 #include <algorithm>
 
@@ -92,7 +92,7 @@ void MonteCarlo(){
       c.high = *std::max_element(
         std::begin(Cashflow),
         std::end(Cashflow));
-      
+       
       c.low = *std::min_element(
         std::begin(Cashflow),
         std::end(Cashflow));
@@ -109,43 +109,22 @@ void MonteCarlo(){
 }
 
 size_t idx(size_t x){
-  for(size_t a{0}; a
+  for(size_t a{0}; a + x
     < period.size(); a++){
-    try{
-      size_t r = (a <= period.size()) ? a : 
-        ((a > x) && (a != x)) ? a - x :
-        ((a < x) && (a != x)) ? (x - a) :
-         (a + x) - x;
-    
-    
-      if(r > 0 && r <= period.size()) return r;
 
-      if(r <= 0 && r > period.size()){
-        throw std::runtime_error
-          ("completely out of the freaking index!\n");
-        
-        std::this_thread::sleep_for(
-          std::chrono::milliseconds(10));
-      }
-
-    }catch(const std::exception& ex){
-      std::cerr << "error:" << ex.what() << "\n";
-    }
-  }
- 
-  return 0uz;
+      if(a > period.size())
+        std::this
+    return (a <= period.size()) ? a : 0;
 }
-
-size_t a;
 
 double body(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
-      candle c = period[x];
+     
+       candle c = period[x];
 
-      return x <= period.size() ?
-      std::abs(c.open - c.close) : 0; 
+       return std::abs(c.open - c.close);
     }
 
     if(x > period.size()){

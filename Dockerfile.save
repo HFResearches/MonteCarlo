@@ -1,0 +1,6 @@
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+RUN echo "vm.swappiness=10" >> 
+  /etc/sysctl.conf && \

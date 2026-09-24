@@ -1,4 +1,5 @@
 #include <iostream>
+#include <random>
 #include <chrono>
 #include <thread>
 
@@ -24,31 +25,46 @@ constexpr double totalAssets{100.000};
 
 double var;
 
+std::unique_ptr<double> variance(){
+  std::random_device rd;
+  std::mt19937 gerar(rd());
+
+  std::uniform_real_distribution<double>
+    pointdistribuir(-0.100, 0.100);
+
+  var = pointdistribuir(gerar);
+  return std::make_unique<double>(var); 
+}
+
 bool hasOpen, hasHigh, hasLow, hasClose =
   {false};
 
-uint64_t xValue{1234567};
+int tcp_connect(const char* host,
+  const char* port){
 
-inline uint64_t valorXS(){
-  xValue ^= xValue << 13;
-  xValue ^= xValue >> 7;
-  xValue ^= xValue << 17;
+  struct addrinfo hints{};
+  hints.ai_family=AF_UNSPEC;
+  hints.ai_socktype=SOCK_STREAM;
 
-  return xValue;
-}
+  struct addrinfo* result = nullptr;
+  if(getaddrinfo(host,port,&hints,&result) != 0)
+    return -1;
 
-inline double rand_range(double min,
-  double max){
+  int fd = -1;
+  for(auto p = result; p; p->ai_next){
+    fd = socket(p->ai_family, p->ai_socktype,
+    p->ai_protocol);
 
-  return min + (max - min) * (valorXS() / 
-   18446744073709551616.0);
-}
+    if(fd < 0) continue;
+    if(connect(fd, p->ai_addr, p->ai_addrlen) ==
+      0) break;
 
-double r1{0.01};
-double r2{0.100};
-inline double variancia(){
-  double rTurn = rand_range(r1, r2);
-  return rTurn;
+    close(fd);
+    fd = -1;
+  }
+  
+  freeaddrinfo(result);
+  return fd;
 }
 
 void MonteCarlo(){
@@ -56,18 +72,22 @@ void MonteCarlo(){
   candle c;
   double d,d1={0.0}; 
     
-
+  const char* host = "biquote.io";
+  const char* port = "443";
   while(true){
     for(std::atomic<size_t> a{0uz}; a < 1024;
       a++){
-       
+      int Socket = tcp_connect(host, port);
+      SSL_CTX* ctx =
+        SSL_CTX_new(TLS_client_method());
+ 
+      
       for(std::atomic<size_t> x{0uz};
         x.load(std::memory_order_relaxed)
         < 4; x++){
-        
-          
-        d = variancia();
-        d1 = variancia();
+  
+        d = *variance();
+        d1 = *variance();
 
         cashflow[x.load(std::memory_order_relaxed)] =
           totalAssets + (d - d1);
@@ -76,8 +96,8 @@ void MonteCarlo(){
       for(std::atomic<size_t> x{0uz};
         x.load(std::memory_order_relaxed) < 4; x++){
 
-        d = variancia();
-        d1 = variancia();
+        d = *variance();
+        d1 = *variance();
 
         Cashflow[x.load(std::memory_order_relaxed)] =
           cashflow[x.load(std::memory_order_relaxed)] + (d - d1);
@@ -92,13 +112,13 @@ void MonteCarlo(){
       c.high = *std::max_element(
         std::begin(Cashflow),
         std::end(Cashflow));
-      
+       
       c.low = *std::min_element(
         std::begin(Cashflow),
         std::end(Cashflow));
 
-//      std::cout << std::setprecision(6) << c.open << "|" << c.high
-//      << "|" << c.low << "|" << c.close << "\n";   
+      //std::cout << std::setprecision(6) << c.open << "|" << c.high
+      // << "|" << c.low << "|" << c.close << "\n";   
 
       {
         std::lock_guard<std::mutex> lock(mtx);
@@ -109,43 +129,18 @@ void MonteCarlo(){
 }
 
 size_t idx(size_t x){
-  for(size_t a{0}; a
-    < period.size(); a++){
-    try{
-      size_t r = (a <= period.size()) ? a : 
-        ((a > x) && (a != x)) ? a - x :
-        ((a < x) && (a != x)) ? (x - a) :
-         (a + x) - x;
-    
-    
-      if(r > 0 && r <= period.size()) return r;
-
-      if(r <= 0 && r > period.size()){
-        throw std::runtime_error
-          ("completely out of the freaking index!\n");
-        
-        std::this_thread::sleep_for(
-          std::chrono::milliseconds(10));
-      }
-
-    }catch(const std::exception& ex){
-      std::cerr << "error:" << ex.what() << "\n";
-    }
-  }
- 
-  return 0uz;
+  for(size_t a{0}; a < period.size(); a++)
+    return (a+x) <= period.size() ? a+x : 0;
 }
-
-size_t a;
 
 double body(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
-      candle c = period[x];
+     
+       candle c = period[x];
 
-      return x <= period.size() ?
-      std::abs(c.open - c.close) : 0; 
+       return std::abs(c.open - c.close);
     }
 
     if(x > period.size()){
