@@ -97,8 +97,7 @@ void MonteCarlo(){
         std::begin(Cashflow),
         std::end(Cashflow));
 
-//      std::cout << std::setprecision(6) << c.open << "|" << c.high
-//      << "|" << c.low << "|" << c.close << "\n";   
+//      std::cout << "period size="<< period.size() << "\n";   
 
       {
         std::lock_guard<std::mutex> lock(mtx);
@@ -142,15 +141,17 @@ double body(size_t x){
   try{
     {
       std::lock_guard<std::mutex> lock(mtx);
-      candle c = period[x];
 
-      return x <= period.size() ?
-      std::abs(c.open - c.close) : 0; 
-    }
+      if(x < period.size()){
+        candle c = period[x];
 
-    if(x > period.size()){
-      throw std::runtime_error("out of the index!\n");
-      std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        return std::abs(c.open - c.close);
+      } 
+
+      if(x > period.size()){
+        throw std::runtime_error("out of the index!\n");
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+      }
     }
   }catch(const std::exception& ex){
     std::cerr << "error:" << ex.what() << '\n';
