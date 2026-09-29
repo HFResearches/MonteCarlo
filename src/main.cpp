@@ -14,25 +14,16 @@ int main(){
   t.detach();
   
   while(true){
-    condition = body(idx(2)) < body(idx(3))
-    && (net(idx(1)) < 0 || net(idx(1)) > 0) && 
-    period.size() <= 1024 && period.size() >= 3;
-      if(condition){
-        engulfing+=1;
-        
-        std::cout << "engulfing:" << engulfing << 
-        " :" << period.size() << "\n";
-      }
+    for(size_t sumloop{0uz}; sumloop < 4; sumloop++)
+    std::cout << "volatility:" << volatility(sumloop) << 
+    " :" << period.size() << "\n";
  
-      if(period.empty() || 3 > period.size())
-        std::this_thread::sleep_for(
-        std::chrono::milliseconds(5));
-      do{
-        engulfing +=0;
-
+    if(period.empty() || 3 > period.size())
+      std::this_thread::sleep_for(
+      std::chrono::milliseconds(5));
+    do{
         period.clear();
-      }while(period.size() >= 1024 && engulfing >= 
-       period.size()); 
+    }while(period.size() >= 1024); 
   }
 
   return {};

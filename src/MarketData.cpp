@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <algorithm>
 
+#include <cmath>
 #include <stdexcept>
 #include <numeric>
 #include <atomic>
@@ -219,5 +220,38 @@ double upperShadow(size_t x){
   }
 }
 
+double v{0.0};
+double average{0.0};
+double diff{0.0};
+double expo{0.0};
 
+double volatility(size_t x){
+  {
+    std::lock_guard<std::mutex> lock(mtx);
+
+    try{
+      if(period.size() < idx(x)){
+        throw std::runtime_error("out of the goddamned index!\n");
+
+        std::this_thread::sleep_for(std::chrono::milliseconds(5));
+      }
+ 
+      candle c = period[idx(x)];
+ 
+      v += (std::abs(c.open - c.close));
+
+
+      average = v / x - 1;
+      diff += std::abs(c.open - c.close) - average;
+
+      expo = std::pow(diff, 2);      
+
+      return std::sqrt(expo);
+
+    }catch(const std::exception& ex){
+      std::cerr << "exception error " << ex.what() << "\n";
+    }    
+  }
+
+}
 
