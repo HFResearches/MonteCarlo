@@ -24,3 +24,6 @@ jobs:
 
       - name: compiling
         run: cmake --build build j4
+
+      - name: running
+        run: build/MonteCarlo
