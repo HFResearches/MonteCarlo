@@ -227,7 +227,7 @@ double expo{0.0};
 
 candle c;
 
-double volatility(size_t x){
+long double volatility(size_t x){
   {
     std::lock_guard<std::mutex> lock(mtx);
     size_t noptr{idx(x)};
