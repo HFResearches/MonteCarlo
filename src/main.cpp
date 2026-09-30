@@ -14,12 +14,12 @@ int main(){
   t.detach();
   
   while(true){
-    for(size_t sumloop{0uz}; sumloop < 4; sumloop++)
-    std::cout << "volatility:" << std::setprecision(7) 
+    for(size_t sumloop{0uz}; sumloop < 10; sumloop++)
+    std::cout << "volatility:" << std::setprecision(17) 
     << volatility(sumloop) << 
     " :" << period.size() << "\n";
  
-    if(period.empty() || 4 > period.size())
+    if(period.empty() || 10 > period.size())
       std::this_thread::sleep_for(
       std::chrono::milliseconds(5));
     
