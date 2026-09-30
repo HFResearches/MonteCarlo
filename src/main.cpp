@@ -1,6 +1,6 @@
 #include <iostream>
 #include <thread>
-
+#include <iomanip>
 #include <chrono>
 #include "MarketData.hpp"
 
@@ -15,15 +15,14 @@ int main(){
   
   while(true){
     for(size_t sumloop{0uz}; sumloop < 4; sumloop++)
-    std::cout << "volatility:" << volatility(sumloop) << 
+    std::cout << "volatility:" << std::setprecision(7) 
+    << volatility(sumloop) << 
     " :" << period.size() << "\n";
  
-    if(period.empty() || 3 > period.size())
+    if(period.empty() || 4 > period.size())
       std::this_thread::sleep_for(
       std::chrono::milliseconds(5));
-    do{
-        period.clear();
-    }while(period.size() >= 1024); 
+    
   }
 
   return {};

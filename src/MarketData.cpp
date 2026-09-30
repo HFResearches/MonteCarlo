@@ -225,21 +225,26 @@ double average{0.0};
 double diff{0.0};
 double expo{0.0};
 
+candle c;
+
 double volatility(size_t x){
   {
     std::lock_guard<std::mutex> lock(mtx);
+    size_t noptr{idx(x)};
 
+    size_t* ptr{&noptr};
     try{
-      if(period.size() < idx(x)){
+      if(*ptr > period.size() || period.empty()){
         throw std::runtime_error("out of the goddamned index!\n");
 
         std::this_thread::sleep_for(std::chrono::milliseconds(5));
       }
  
-      candle c = period[idx(x)];
+      if(*ptr <= period.size()){
+         c = period[idx(x)];
  
-      v += (std::abs(c.open - c.close));
-
+         v += (std::abs(c.open - c.close));
+      }
 
       average = v / x - 1;
       diff += std::abs(c.open - c.close) - average;
@@ -253,5 +258,6 @@ double volatility(size_t x){
     }    
   }
 
+  return 0.0;
 }
 
