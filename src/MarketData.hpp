@@ -18,4 +18,4 @@ double body(size_t x);
 double net(size_t x);
 double lowerShadow(size_t x);
 double upperShadow(size_t x);
-long double volatility(size_t x);
+long double volatility(size_t x, size_t a);

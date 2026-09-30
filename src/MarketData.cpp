@@ -227,7 +227,7 @@ double expo{0.0};
 
 candle c;
 
-long double volatility(size_t x){
+long double volatility(size_t x, size_t a){
   {
     std::lock_guard<std::mutex> lock(mtx);
     size_t noptr{idx(x)};
@@ -246,7 +246,7 @@ long double volatility(size_t x){
          v += (std::abs(c.open - c.close));
       }
 
-      average = v / x - 1;
+      average = v / a - 1;
       diff += std::abs(c.open - c.close) - average;
 
       expo = std::pow(diff, 2);      

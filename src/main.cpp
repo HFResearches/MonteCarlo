@@ -16,7 +16,7 @@ int main(){
   while(true){
     for(size_t sumloop{0uz}; sumloop < 10; sumloop++)
     std::cout << "volatility:" << std::setprecision(17) 
-    << volatility(sumloop) << 
+    << volatility(sumloop, 10) << 
     " :" << period.size() << "\n";
  
     if(period.empty() || 10 > period.size())
