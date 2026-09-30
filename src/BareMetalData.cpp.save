@@ -1,0 +1,9 @@
+#include <iostream>
+
+#include "BareMetalData.hpp"
+
+template<typename x>
+class Ring{
+  
+
+};

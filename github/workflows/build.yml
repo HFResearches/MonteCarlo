@@ -26,4 +26,5 @@ jobs:
         run: cmake --build build j4
 
       - name: running
-        run: cd build && ./MonteCarlo
+        run: |
+          ./build/MonteCarlo
