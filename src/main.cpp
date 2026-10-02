@@ -9,14 +9,17 @@ size_t x{0uz};
 int engulfing{0};
 bool condition{false};
 
+size_t Idx(size_t x){
+  for(size_t t{0uz}; t < x; t++) return t;
+}
+
 int main(){
   std::thread t(MonteCarlo);
   t.detach();
   
   while(true){
-    for(size_t sumloop{0uz}; sumloop < 10; sumloop++)
     std::cout << "volatility:" << std::setprecision(17) 
-    << volatility(sumloop, 10) << 
+    << volatility(10,1,10) << 
     " :" << period.size() << "\n";
  
     if(period.empty() || 10 > period.size())

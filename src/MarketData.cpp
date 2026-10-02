@@ -225,9 +225,12 @@ double average{0.0};
 double diff{0.0};
 double expo{0.0};
 
-candle c;
+candle c,ba;
+bool Diff{false};
 
-long double volatility(size_t x, size_t a){
+long double volatility(size_t x,
+                       size_t b,
+                       size_t a){
   {
     std::lock_guard<std::mutex> lock(mtx);
     size_t noptr{idx(x)};
@@ -241,21 +244,32 @@ long double volatility(size_t x, size_t a){
       }
  
       if(*ptr <= period.size()){
-         c = period[idx(x)];
- 
-         v += (std::abs(c.open - c.close));
+        for(size_t as{b}; as < x; as++){
+          c = period[idx(as)];
+          ba = period[idx(x)];
+
+          if(*ptr <= period.size() && as < x)
+            v += (std::abs(c.open - c.close));
+
+          if(*ptr > period.size() || as == x &&
+             period.size() >= x){  
+   
+            std::cout << "has entered in the loop to do nothing" 
+              "because index has reached maximum space x" <<"!\n";
+           
+            average = v / a - 1;
+                      
+            diff += std::abs(ba.open -
+            ba.close) - average;
+
+            expo = std::pow(diff, 2);                                    
+            return std::sqrt(expo);
+          }
+        }
       }
-
-      average = v / a - 1;
-      diff += std::abs(c.open - c.close) - average;
-
-      expo = std::pow(diff, 2);      
-
-      return std::sqrt(expo);
-
     }catch(const std::exception& ex){
       std::cerr << "exception error " << ex.what() << "\n";
-    }    
+    }   
   }
 
   return 0.0;
