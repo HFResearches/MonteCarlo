@@ -1,5 +1,6 @@
 #include <string>
 #include <limits>
+#include <mutex>
 
 #include <atomic>
 #include <chrono>
@@ -12,6 +13,8 @@
 uint32_t max{std::numeric_limits<uint32_t>::max()};
 uint32_t x{0};
 uint32_t maxCompare{max};
+
+std::mutex mtx;
 
 candle* period;
 inline uint32_t xOR()noexcept{
@@ -40,9 +43,11 @@ void MketData(){
     a.load(std::memory_order_relaxed) <
     1024; a++){
 
-    *period{
-      new candle(1);
-    };
+    mtx.lock();
+      *period{
+        new candle(1);
+      };
+    mtx.unlock();
 
     MAXIDX{
       sizeof(period) % 4
@@ -58,22 +63,24 @@ void MketData(){
       &asa
     };
 
-   
-    period[MAXIDX]->open{
-      *cashFlow
-    };
+    mtx.lock();
+      period[MAXIDX]->open{
+        *cashFlow
+      };
 
-    period[MAXIDX]->high{
-      *cashFlow
-    };
+      period[MAXIDX]->high{
+        *cashFlow
+      };
 
-    period[MAXIDX]->low{
-      *cashFlow
-    };
+      period[MAXIDX]->low{
+        *cashFlow
+      };
 
-    period[MAXIDX]->close{
-      *cashFlow
-    };
+      period[MAXIDX]->close{
+        *cashFlow
+      };
+
+    mtx.unlock();
 
     if(MAXIDX >= 1024){
       std::this_thread::sleep_for(

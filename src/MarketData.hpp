@@ -1,3 +1,5 @@
+#include <mutex>
+
 struct alignas(64) candle{
   double open;
   double high;
@@ -5,5 +7,6 @@ struct alignas(64) candle{
   double close;
 };
 
-extern candle* period[];
+extern candle* period;
+extern std::mutex mtx;
 void MketData();
