@@ -12,7 +12,7 @@
 
 uint32_t max{std::numeric_limits<uint32_t>::max()};
 uint32_t x{0};
-uint32_t maxCompare{max};
+uint32_t maxCompare{100};
 
 std::mutex mtx;
 
@@ -29,6 +29,7 @@ inline uint32_t xOR()noexcept{
       std::memory_order_acquire);
 
    return max;
+  }
 }
 
 inline uint32_t rangeAt()noexcept{
