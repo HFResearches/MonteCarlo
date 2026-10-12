@@ -65,16 +65,16 @@ void MketData(){
         period[MAXIDX]
       };
 
-      c->open =
+      c.open =
         *cashFlow;
 
-      c->high =
+      c.high =
         *cashFlow;
 
-      c->low =
+      c.low =
         *cashFlow;
 
-      c->close =
+      c.close =
         *cashFlow;
 
     mtx.unlock();
