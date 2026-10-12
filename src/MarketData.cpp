@@ -61,7 +61,7 @@ void MketData(){
       &asa;
 
     mtx.lock();
-      candle* c{
+      candle c{
         period[MAXIDX]
       };
 
