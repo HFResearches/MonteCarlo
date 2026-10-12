@@ -45,8 +45,8 @@ void MketData(){
     1024; a++){
 
     mtx.lock();
-      *period{
-        new candle(1);
+      period{
+        new candle(1)
       };
     mtx.unlock();
 
