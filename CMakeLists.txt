@@ -29,4 +29,4 @@ target_include_directories(MonteCarlo
   PRIVATE src)
 
 target_link_libraries(MonteCarlo PRIVATE
-  PRIVATe MonteCarlolib)
+  PRIVATE MonteCarlolib)
