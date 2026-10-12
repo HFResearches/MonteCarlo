@@ -45,41 +45,33 @@ void MketData(){
     1024; a++){
 
     mtx.lock();
-      period{
-        new candle(1)
-      };
+      period =
+        new candle(1);
     mtx.unlock();
 
-    MAXIDX{
-      sizeof(period) % 4
-    };
+    MAXIDX =
+      sizeof(period) % 4;
 
-    asa{
+    asa =
       100.000 + ((rangeAt()
       / 1000) - (rangeAt() / 
-      1000))
-    };
+      1000));
 
-    double* cashFlow{
-      &asa
-    };
+    double* cashFlow =
+      &asa;
 
     mtx.lock();
-      period[MAXIDX]->open{
-        *cashFlow
-      };
+      period[MAXIDX]->open =
+        *cashFlow;
 
-      period[MAXIDX]->high{
-        *cashFlow
-      };
+      period[MAXIDX]->high =
+        *cashFlow;
 
-      period[MAXIDX]->low{
-        *cashFlow
-      };
+      period[MAXIDX]->low =
+        *cashFlow;
 
-      period[MAXIDX]->close{
-        *cashFlow
-      };
+      period[MAXIDX]->close =
+        *cashFlow;
 
     mtx.unlock();
 
