@@ -33,7 +33,7 @@ inline uint32_t rangeAt()noexcept{
 }
 
 double  asa{0.0};
-sjzze_t MAXIDX{0uz};
+size_t MAXIDX{0uz};
 
 void MketData(){
   for(std::atomic<size_t>a{0uz};
