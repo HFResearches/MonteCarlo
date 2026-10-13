@@ -77,6 +77,15 @@ void MketData(){
       c.close =
         *cashFlow;
 
+      std::string output{
+        std::to_string(c.open) + ":" + 
+        std::to_string(c.high) + ":" +
+        std::to_string(c.low) + ":" +
+        std::to_string(c.close) + "\n";
+
+      write(STDOUT_FILENO, output.data(), 
+      output.size());
+
     mtx.unlock();
 
     if(MAXIDX >= 1024){
