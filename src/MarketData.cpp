@@ -81,7 +81,7 @@ void MketData(){
         std::to_string(c.open) + ":" + 
         std::to_string(c.high) + ":" +
         std::to_string(c.low) + ":" +
-        std::to_string(c.close) + "\n";
+        std::to_string(c.close) + "\n"};
 
       write(STDOUT_FILENO, output.data(), 
       output.size());
