@@ -17,4 +17,4 @@ jobs:
         with:
           name: MonteCarlo
           path: build/MonteCarlo
-          retention-days: 30    
+          retention-days: 30
