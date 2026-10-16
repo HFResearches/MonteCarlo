@@ -16,5 +16,5 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: MonteCarlo
-          path: MonteCarlo/build/MonteCarlo
-    
+          path: build/MonteCarlo
+          retention-days: 30    
