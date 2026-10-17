@@ -1,6 +1,6 @@
-#include <string>
 #include <limits>
 #include <mutex>
+#include <string>
 
 #include <atomic>
 #include <chrono>
@@ -16,84 +16,64 @@ uint32_t maxCompare{100};
 
 std::mutex mtx;
 
-candle* period;
-inline uint32_t xOR()noexcept{
-  for(std::atomic<uint32_t> u{0}; u.load(
-    std::memory_order_relaxed) <
-    maxCompare; u++){
- 
-    max ^= max << u.load(
-     std::memory_order_acquire);
-   
-    max ^= max >> u.load(
-      std::memory_order_acquire);
+candle *period;
+inline uint32_t xOR() noexcept {
+  for (std::atomic<uint32_t> u{0};
+       u.load(std::memory_order_relaxed) < maxCompare; u++) {
 
-   return max;
+    max ^= max << u.load(std::memory_order_acquire);
+
+    max ^= max >> u.load(std::memory_order_acquire);
+
+    return max;
   }
 }
 
-inline uint32_t rangeAt()noexcept{
-  return 0 + xOR() % (100 - 0 + 1);
-}
+inline uint32_t rangeAt() noexcept { return 0 + xOR() % (100 - 0 + 1); }
 
-double  asa{0.0};
+double asa{0.0};
 size_t MAXIDX{0uz};
 
-void MketData(){
-  for(std::atomic<size_t>a{0uz};
-    a.load(std::memory_order_relaxed) <
-    1024; a++){
+void MketData() {
+  while (true) {
+    for (std::atomic<size_t> a{0uz}; a.load(std::memory_order_relaxed) < 1024;
+         a++) {
 
-    mtx.lock();
-      period =
-        new candle(1);
-    mtx.unlock();
+      mtx.lock();
+      period = new candle(1);
+      mtx.unlock();
 
-    MAXIDX =
-      sizeof(period) % 4;
+      MAXIDX = sizeof(period) % 4;
 
-    asa =
-      100.000 + ((rangeAt()
-      / 1000) - (rangeAt() / 
-      1000));
+      asa = 100.000 + ((rangeAt() / 1000) - (rangeAt() / 1000));
 
-    double* cashFlow =
-      &asa;
+      double *cashFlow = &asa;
 
-    mtx.lock();
-      candle c{
-        period[MAXIDX]
-      };
+      mtx.lock();
+      candle c{period[MAXIDX]};
 
-      c.open =
-        *cashFlow;
+      c.open = *cashFlow;
 
-      c.high =
-        *cashFlow;
+      c.high = *cashFlow;
 
-      c.low =
-        *cashFlow;
+      c.low = *cashFlow;
 
-      c.close =
-        *cashFlow;
+      c.close = *cashFlow;
 
-      std::string output{
-        std::to_string(c.open) + ":" + 
-        std::to_string(c.high) + ":" +
-        std::to_string(c.low) + ":" +
-        std::to_string(c.close) + "\n"};
+      std::string output{std::to_string(c.open) + ":" + std::to_string(c.high) +
+                         ":" + std::to_string(c.low) + ":" +
+                         std::to_string(c.close) + "\n"};
 
-      write(STDOUT_FILENO, output.data(), 
-      output.size());
+      write(STDOUT_FILENO, output.data(), output.size());
 
-    mtx.unlock();
+      mtx.unlock();
 
-    if(MAXIDX >= 1024){
-      std::this_thread::sleep_for(
-        std::chrono::milliseconds(500));
+      if (MAXIDX >= 1024) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
-      delete[] period;
-      period = nullptr;
+        delete[] period;
+        period = nullptr;
+      }
     }
   }
 }
