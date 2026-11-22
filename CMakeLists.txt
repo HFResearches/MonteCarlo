@@ -1,32 +1,31 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.20)
 
 project(MonteCarlo
-  LANGUAGES CXX
-  VERSION 1.0)
+        VERSION 1.25
+        LANGUAGES CXX C)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+set(CMAKE_CXX_STARNDARDS 27)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
 set(CMAKE_BUILD_TYPE Debug)
-set(PROJECT_NAME MonteCarlo)
 
-find_program(CCACHE_PROGRAM ccache)
-if(CCACHE_PROGRAM)
-  set(CMAKE_COMPILER_C_LAUNCHER 
-    "${CCACHE_PROGRAM}")
+find_program(CCACHE ccache)
 
-  set(CMAKE_COMPILER_CXX_LAUNCHER
-    "${CCACHE_PROGRAM}")
+if(CCACHE)
+  set(CMAKE_C_COMPILER_LAUNCHER ${CCACHE})
+  set(CMAKE_CXX_COMPILER_LAUNCHER ${CCACHE})
 endif()
 
 add_executable(MonteCarlo
-  src/main.cpp)
+               src/main.cpp)
 
-add_library(MonteCarlolib
-  src/MarketData)
+add_library(MonteCarloLib
+            src/MarketData.cpp
+            src/container.cpp
+            src/rand.cpp)
 
-target_include_directories(MonteCarlo
-  PRIVATE src)
-
-target_link_libraries(MonteCarlo PRIVATE
-  PRIVATE MonteCarlolib)
+target_link_libraries(MonteCarlo 
+                      PRIVATE
+                      MonteCarloLib)
+            
+target_include_directories(MonteCarlo 
+                           PRIVATE src)

@@ -1,0 +1,94 @@
+string(3)                                                                Library Functions Manual                                                               string(3)
+
+NAME
+       stpcpy,  strcasecmp,  strcat,  strchr, strcmp, strcoll, strcpy, strcspn, strdup, strfry, strlen, strncat, strncmp, strncpy, strncasecmp, strpbrk, strrchr, strsep,
+       strspn, strstr, strtok, strxfrm, index, rindex - string operations
+
+LIBRARY
+       Standard C library (libc, -lc)
+
+SYNOPSIS
+       #include <strings.h>
+
+       strcasecmp(3)
+              Compare two strings, ignoring case.
+
+       strncasecmp(3)
+              Compare the first bytes of two strings, ignoring case.
+
+       index(3)
+              Identical to strchr(3).
+
+       rindex(3)
+              Identical to strrchr(3).
+
+       #include <string.h>
+
+       stpcpy(3)
+              Copy a string, returning a pointer to the end of the resulting string.
+
+       strcat(3)
+              Append a string into an existing string.
+
+       strchr(3)
+              Find the first occurrence of a character in a string.
+
+       strcmp(3)
+              Compare two strings.
+
+       strcoll(3)
+              Compare two strings, using the current locale.
+
+       strcpy(3)
+              Copy a string.
+
+       strcspn(3)
+              Calculate the length of the initial segment of a string which does not contain any of the rejected bytes.
+
+       strdup(3)
+              Duplicate a string in memory allocated using malloc(3).
+
+       strfry(3)
+              Randomly swap the characters in a string.
+
+       strlen(3)
+              Return the length of a string.
+
+       strncat(3)
+              Append non-null bytes from an array to a string, and null-terminate the result.
+
+       strncmp(3)
+              Compare the first bytes of two strings.
+
+       strpbrk(3)
+              Find the first occurrence in a string of one of the bytes in the accepted bytes.
+
+       strrchr(3)
+              Find the last occurrence of a character in a string.
+
+       strsep(3)
+              Extract the initial field in a string that is delimited by one of the delimiter bytes.
+
+       strspn(3)
+              Calculate the length of the initial segment of a string that consists entirely of accepted bytes.
+
+       strstr(3)
+              Find the first occurrence of a substring in a string.
+
+       strtok(3)
+              Extract tokens from a string that are delimited by one of the delimiter bytes.
+
+       strxfrm(3)
+              Transforms a string to the current locale and copies the first bytes to a buffer.
+
+       strncpy(3)
+              Fill a fixed-size buffer with leading non-null bytes from a source array, padding with null bytes as needed.
+
+DESCRIPTION
+       The string functions perform operations on null-terminated strings.  See the individual man pages for descriptions of each function.
+
+SEE ALSO
+       bstring(3), stpcpy(3), strcasecmp(3), strcat(3), strchr(3), strcmp(3), strcoll(3), strcpy(3), strcspn(3), strdup(3), strfry(3), strlen(3),  strncasecmp(3),  strn‐
+       cat(3), strncmp(3), strncpy(3), strpbrk(3), strrchr(3), strsep(3), strspn(3), strstr(3), strtok(3), strxfrm(3)
+
+Linux man-pages 6.17                                                            2026-02-08                                                                      string(3)
